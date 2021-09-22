@@ -1,52 +1,60 @@
 import React, { useState,useEffect } from "react";
 import { dbService } from "../fbase";
-import { collection,doc,getDocs,addDoc } from "firebase/firestore"
+import { collection,onSnapshot , doc,getDocs,addDoc } from "firebase/firestore"
 
-const Home = () => {
+const Home = (userObj) => {
 	const [nweet, setNweet] = useState("");
 	const [nweets, setNweets] = useState([]);
+	const [user, setUser] = useState();
 	const dbNweets = collection(dbService,"nweets");
-	const getNweets = async() =>{
-		const snapShot = await getDocs(dbNweets);
-		snapShot.docs.forEach((doc) => {
-			const nweetObject = { ...doc.data(), id : doc.id};
-			// console.log(nweetObject)
-			setNweets((prev)=> [nweetObject, ...prev])
-		});
-		console.log(nweets);
-		// setNweets(NweetList);
-	}
 	useEffect(() => {
-		getNweets();
+		setUser(userObj);
+		onSnapshot(dbNweets,(snapshot) => {
+			const nweetArr = snapshot.docs.map(doc => 
+								({id : doc.id, ...doc.data(),
+							}));
+			setNweets(nweetArr);
+		});
 	},[])
 	const onSubmit = async(event) => {
-		// console.log("clicked")
 		event.preventDefault();
-		await addDoc(dbNweets ,{
-			data : nweet,
-			createAt : Date.now()
-		});
-;		setNweet("");
+		if (nweet.length>0){
+			//console.log(nweet,user.uid);
+			await addDoc(dbNweets ,{
+				text : nweet,
+				createAt : Date.now(),
+			//	creatorId : user.uid,
+			});
+			setNweet("");
+			
+		}
 	}
 	const onChange = (event) => {
 		const { target :{name,value} } = event;
 		setNweet(value);
 	}
+	const parseDate = (milisec) => {
+		const date = new Date();
+		date.setTime(milisec);
+		console.log(date)
+		return date.toString()
+	}
 	return(
 		<div>
 			<span>Home</span>
 			<form>
-				<input value={nweet} onChange={onChange} type="text" placeholder="What's on your mind?" maxLength={120} />
+				<input value={nweet} onChange={onChange} type="text" 
+					placeholder="What's on your mind?" maxLength={120} />
 				<input type="submit" onClick={onSubmit} value="Nweet" />
 			</form>
 			<div>
-				{nweets.map((nweet) => {
+				{nweets && nweets.map((nweet) => (
 					<div key={nweet.id} > 
-						<h4>{nweet.data}</h4>
-						<p>{nweet.createAt}</p>
+						<h4>{nweet.text}</h4>
+						<p>{parseDate(nweet.createAt)}</p>
 						<hr />
 					</div>
-				})}
+				))}
 			</div>
 		</div>
 	);
