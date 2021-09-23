@@ -1,4 +1,3 @@
-// import { initializeApp } from "firebase/app";
 import * as firebase from "firebase/app";
 import { getAuth } from "firebase/auth"
 import { getAnalytics } from "firebase/analytics";
@@ -19,3 +18,4 @@ export const firebaseApp = firebase.initializeApp(firebaseConfig);
 export const analytics = getAnalytics(firebaseApp);
 export const authService = getAuth();
 export const dbService = getFirestore(firebaseApp);
+export const storageService = firebase.storage();
