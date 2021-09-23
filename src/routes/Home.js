@@ -1,8 +1,9 @@
 import React, { useState,useEffect } from "react";
 import { dbService } from "../fbase";
+import Nweet from "../components/Nweet";
 import { collection,onSnapshot , doc,getDocs,addDoc } from "firebase/firestore"
 
-const Home = (userObj) => {
+const Home = ({userObj}) => {
 	const [nweet, setNweet] = useState("");
 	const [nweets, setNweets] = useState([]);
 	const [user, setUser] = useState();
@@ -19,25 +20,17 @@ const Home = (userObj) => {
 	const onSubmit = async(event) => {
 		event.preventDefault();
 		if (nweet.length>0){
-			//console.log(nweet,user.uid);
 			await addDoc(dbNweets ,{
 				text : nweet,
 				createAt : Date.now(),
-			//	creatorId : user.uid,
+				creatorId : user.uid,
 			});
 			setNweet("");
-			
 		}
 	}
 	const onChange = (event) => {
 		const { target :{name,value} } = event;
 		setNweet(value);
-	}
-	const parseDate = (milisec) => {
-		const date = new Date();
-		date.setTime(milisec);
-		console.log(date)
-		return date.toString()
 	}
 	return(
 		<div>
@@ -49,11 +42,7 @@ const Home = (userObj) => {
 			</form>
 			<div>
 				{nweets && nweets.map((nweet) => (
-					<div key={nweet.id} > 
-						<h4>{nweet.text}</h4>
-						<p>{parseDate(nweet.createAt)}</p>
-						<hr />
-					</div>
+					<Nweet key={nweet.id} nweetObj={nweet} isOwner={(userObj.uid==nweet.creatorId)} />
 				))}
 			</div>
 		</div>

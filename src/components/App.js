@@ -13,6 +13,7 @@ function App() {
 			if(user){
 				setIsLoggedIn(true);
 				setUserObj(user);
+				console.log("user",user.uid,user.email)
 			}else {
 				setIsLoggedIn(false);
 			}
@@ -21,7 +22,7 @@ function App() {
 	},[])
   return (
 	  <>
-	  {init ? <AppRouter isLoggedIn={isLoggedIn} user={userObj}/> : "Initializing..." }
+	  {init ? <AppRouter isLoggedIn={isLoggedIn} userObj={userObj}/> : "Initializing..." }
 	  	<footer>
 		  &copy; {new Date().getFullYear()} Nwitter
 	  	</footer>
