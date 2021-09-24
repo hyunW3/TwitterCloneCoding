@@ -1,7 +1,9 @@
-import * as firebase from "firebase/app";
+// Firebase JS SDK https://modularfirebase.web.app/common-use-cases/storage/
+import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth"
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -13,9 +15,8 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
-export const firebaseInstance = firebase;
-export const firebaseApp = firebase.initializeApp(firebaseConfig);
+export const firebaseApp = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(firebaseApp);
 export const authService = getAuth();
 export const dbService = getFirestore(firebaseApp);
-export const storageService = firebase.storage();
+export const storageService = getStorage();

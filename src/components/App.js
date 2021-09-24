@@ -23,7 +23,7 @@ function App() {
   return (
 	  <>
 	  {init ? <AppRouter isLoggedIn={isLoggedIn} userObj={userObj}/> : "Initializing..." }
-	  	<footer style={{"top-margin":"30px"}}>
+	  	<footer style={{"topMargin":"30px"}}>
 		  &copy; {new Date().getFullYear()} Nwitter
 	  	</footer>
 	  </>
