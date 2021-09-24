@@ -8,7 +8,6 @@ import { ref, uploadString, getDownloadURL } from "firebase/storage";
 const Home = ({userObj}) => {
 	const [nweet, setNweet] = useState("");
 	const [nweets, setNweets] = useState([]);
-	const [user, setUser] = useState(userObj);
 	const [err, setErr] = useState("");
 	const [imageAttachment, setImageAttachment] = useState("");
 	useEffect(() => {
@@ -37,7 +36,7 @@ const Home = ({userObj}) => {
 		const nweetData = {
 			text : nweet,
 			createAt : Date.now(),
-			creatorId : user.uid,
+			creatorId : userObj.uid,
 			attachmentUrl,
 		}
 		try {
