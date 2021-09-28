@@ -1,7 +1,12 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 const Navigation = ({userObj}) => {
-	const displayName = (userObj.displayName != null)?(userObj.displayName):(userObj.email)
+	const [displayName,setDisplayName] = useState("")
+	
+	useEffect(() => {
+		const objName = (userObj.displayName != null)?(userObj.displayName):(userObj.email)
+		setDisplayName(objName)
+	},[userObj,displayName])
 	return(
 		<nav>
 			<ul>

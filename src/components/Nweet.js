@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { dbService,storageService } from "../fbase";
-import { collection, doc, deleteDoc, updateDoc    } from "firebase/firestore"
+import EditNweet from "../components/EditNweet";
+import { dbService, storageService } from "../fbase";
+import { doc, deleteDoc   } from "firebase/firestore"
 import { ref, deleteObject  } from "firebase/storage"
+
 const Nweet = ({nweetObj,isOwner}) =>  {
-	const dbNweets = collection(dbService,"nweets");
 	const [editing, setEditing] = useState(false);
-	const [newNweet, setNewNweet] = useState(nweetObj.text);
 	const parseDate = (milisec) => {
 		const date = new Date();
 		date.setTime(milisec);
@@ -21,34 +21,16 @@ const Nweet = ({nweetObj,isOwner}) =>  {
 		}
 	}
 	const toggleEditing = () => setEditing((prev) => !prev);
-	const onSubmit = async (event) => {
-		event.preventDefault();
-		const ref = doc(dbService,"nweets",nweetObj.id);
-		await updateDoc(ref,{text : newNweet});
-		toggleEditing();
-		// setNewNweet(event.value)
-	}
-	const onChangeNweet = (event) => {
-		const {target : {name, value}} = event;
-		setNewNweet(value);
-	}
 	return (
 		<div > 
 			{ editing 
 				? (
-				<>
-					<form>
-						<input type="text" placeholder="Edit your Nweet" 
-							onChange={onChangeNweet} value ={newNweet} required />
-					</form>	
-					<button onClick={toggleEditing}>Cancel</button>
-					<button type="submit" onClick={onSubmit }>Finish Edit</button>
-				</>
+					<EditNweet nweetObj={nweetObj} toggleEditing={toggleEditing} />
 				): (
 			<div>
 			<div style={{}}>
 				<h4>{nweetObj.text}</h4>
-				{nweetObj.attachmentUrl && <img src = {nweetObj.attachmentUrl} width="50px" height="50px" /> }
+				{nweetObj.attachmentUrl && <img alt="attachmentUrl" src={nweetObj.attachmentUrl} width="50px" height="50px" /> }
 			</div>
 			<p>{parseDate(nweetObj.createAt)}</p>
 				

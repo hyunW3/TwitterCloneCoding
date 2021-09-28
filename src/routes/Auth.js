@@ -8,7 +8,6 @@ const Auth=  () => {
 	const [newAccount, setNewAccount] = useState(true);
 	const [error,setError] = useState("");
 	const onChange = (event) => {
-		// console.log(event.target.name);
 		const {target: {name, value}} = event;
 		if(name === "email"){
 			setEmail(value);
@@ -19,17 +18,12 @@ const Auth=  () => {
 	const onSubmit = async (event) => {
 		event.preventDefault();
 		try{
-			let data;
 			if(newAccount){
-				// create Account
-				data = await createUserWithEmailAndPassword(authService,email,password)
+				await createUserWithEmailAndPassword(authService,email,password); // create Account
 			} else {
-				// log in
-				data = await signInWithEmailAndPassword(authService,email,password)
+				await signInWithEmailAndPassword(authService,email,password); // log in
 			}
-			console.log(data)
 		} catch (error){
-			console.log(error)
 			setError(error.message)
 		}
 	}
@@ -43,7 +37,7 @@ const Auth=  () => {
 			provider = new GithubAuthProvider();
 		}
 		try {
-			const data = await signInWithPopup(authService, provider);	
+			await signInWithPopup(authService, provider);	
 		} catch(error) {
 			setError(error.message)
 		}
